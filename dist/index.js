@@ -270,7 +270,6 @@ exports.sortPackages = exports.checkPackages = exports.findPackages = exports.ma
 const path_1 = __nccwpck_require__(5622);
 const semver_1 = __nccwpck_require__(1383);
 const toml_1 = __nccwpck_require__(2901);
-const github_1 = __nccwpck_require__(5928);
 const utils_1 = __nccwpck_require__(918);
 const crates_1 = __nccwpck_require__(90);
 function manifestPath(path) {
@@ -361,24 +360,33 @@ function checkPackages(packages, github) {
         const tasks = [];
         for (const package_name in packages) {
             const package_info = packages[package_name];
-            tasks.push((() => __awaiter(this, void 0, void 0, function* () {
-                const published_versions = yield (0, crates_1.getCrateVersions)(package_name);
-                if (published_versions) {
-                    const version_date = published_versions
-                        .filter(({ version }) => version === package_info.version)
-                        .map(({ created }) => created)[0];
-                    if (version_date) {
-                        // when package with same version already published
-                        // we need check package contents modification time
-                        const last_changes_date = yield (0, github_1.lastCommitDate)(github, package_info.path);
-                        if (last_changes_date.getTime() > version_date.getTime()) {
-                            throw new Error(`It seems package '${package_name}' modified since '${package_info.version}' so new version should be published`);
-                        }
-                        // mark package as already published
-                        package_info.published = true;
-                    }
-                }
-            }))());
+            // tasks.push(
+            //     (async () => {
+            //         const published_versions = await getCrateVersions(package_name)
+            //         if (published_versions) {
+            //             const version_date = published_versions
+            //                 .filter(({version}) => version === package_info.version)
+            //                 .map(({created}) => created)[0]
+            //             if (version_date) {
+            //                 // when package with same version already published
+            //                 // we need check package contents modification time
+            //                 const last_changes_date = await lastCommitDate(
+            //                     github,
+            //                     package_info.path
+            //                 )
+            //                 if (
+            //                     last_changes_date.getTime() > version_date.getTime()
+            //                 ) {
+            //                     throw new Error(
+            //                         `It seems package '${package_name}' modified since '${package_info.version}' so new version should be published`
+            //                     )
+            //                 }
+            //                 // mark package as already published
+            //                 package_info.published = true
+            //             }
+            //         }
+            //     })()
+            // )
             for (const dependency_name in package_info.dependencies) {
                 const dependency = package_info.dependencies[dependency_name];
                 if (dependency.path) {
