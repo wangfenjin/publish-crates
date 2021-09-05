@@ -229,7 +229,7 @@ function run() {
                             (0, core_1.info)(`Package '${package_name}' published successfully`);
                         }
                         catch (error) {
-                            if (ignore_published && error.message.includes(`crate version \`${package_info.path}\` is already uploaded`)) {
+                            if (ignore_published && error.message.includes(`crate version \`${package_info.version}\` is already uploaded`)) {
                                 (0, core_1.warning)(`Ignore error when '${package_name} ${package_info.version}' is already uploaded due to 'ignore-published: true'`);
                             }
                             else {
