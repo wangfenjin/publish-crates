@@ -90,6 +90,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.lastCommitDate = exports.githubHandle = void 0;
+const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
 function githubHandle(token = process.env.GITHUB_TOKEN || '', context = github_1.context) {
     let github;
@@ -136,6 +137,10 @@ query lastCommitDate($owner: String!, $repo: String!, $ref: String!, $path: Stri
         catch (error) {
             throw new Error(`Unable to retrieve history from GitHub due to: ${error.message}`);
         }
+        (0, core_1.info)(`result github ${result}`);
+        (0, core_1.info)(`result github ${result.repository}`);
+        (0, core_1.info)(`result github ${result.repository.ref}`);
+        (0, core_1.info)(`result github ${result.repository.ref.target}`);
         const { history } = result.repository.ref.target;
         if (typeof history !== 'object') {
             // TODO: remove debug out later

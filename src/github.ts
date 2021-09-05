@@ -1,3 +1,4 @@
+import { info } from '@actions/core'
 import {getOctokit, context as github_context} from '@actions/github'
 
 export type Context = typeof github_context
@@ -84,6 +85,10 @@ query lastCommitDate($owner: String!, $repo: String!, $ref: String!, $path: Stri
         )
     }
 
+    info(`result github ${result}`)
+    info(`result github ${result.repository}`)
+    info(`result github ${result.repository.ref}`)
+    info(`result github ${result.repository.ref.target}`)
     const {history} = result.repository.ref.target
 
     if (typeof history !== 'object') {
