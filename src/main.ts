@@ -65,8 +65,9 @@ async function run(): Promise<void> {
                         await awaitCrateVersion(package_name, package_info.version)
                         info(`Package '${package_name}' published successfully`)
                     } catch (error) {
-
-                        if (ignore_published && error.message.includes(`crate version \`${package_info.version}\` is already uploaded`)) {
+                        const imsg = `crate version \`${package_info.version}\` is already uploaded`
+                        warning(`${error.message} || ${imsg}`)
+                        if (ignore_published && error.message.includes(imsg)) {
                             warning(
                                 `Ignore error when '${package_name} ${package_info.version}' is already uploaded due to 'ignore-published: true'`
                             )
