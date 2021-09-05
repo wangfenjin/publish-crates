@@ -56,6 +56,9 @@ async function run(): Promise<void> {
                     )
                 } else {
                     try {
+                        // test if already published
+                        await awaitCrateVersion(package_name, package_info.version)
+                    } catch (_) {
                         info(`Publishing package '${package_name}'`)
                         await exec('cargo', exec_args, exec_opts)
                         await awaitCrateVersion(package_name, package_info.version)
@@ -64,17 +67,20 @@ async function run(): Promise<void> {
                         // to make sure that the new version is published
                         await awaitCrateVersion(package_name, package_info.version)
                         info(`Package '${package_name}' published successfully`)
-                    } catch (error) {
-                        const imsg = `crate version \`${package_info.version}\` is already uploaded`
-                        warning(`${error.message} || ${imsg}`)
-                        if (ignore_published && error.message.includes(imsg)) {
-                            warning(
-                                `Ignore error when '${package_name} ${package_info.version}' is already uploaded due to 'ignore-published: true'`
-                            )
-                        } else {
-                            setFailed(error.message)
-                        }
                     }
+                    // try {
+                        
+                    // } catch (error) {
+                    //     const imsg = `crate version \`${package_info.version}\` is already uploaded`
+                    //     warning(`${error.message} || ${imsg}`)
+                    //     if (ignore_published && error.message.includes(imsg)) {
+                    //         warning(
+                    //             `Ignore error when '${package_name} ${package_info.version}' is already uploaded due to 'ignore-published: true'`
+                    //         )
+                    //     } else {
+                    //         setFailed(error.message)
+                    //     }
+                    // }
                 }
             }
         }

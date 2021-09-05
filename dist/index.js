@@ -219,6 +219,10 @@ function run() {
                     }
                     else {
                         try {
+                            // test if already published
+                            yield (0, crates_1.awaitCrateVersion)(package_name, package_info.version);
+                        }
+                        catch (_) {
                             (0, core_1.info)(`Publishing package '${package_name}'`);
                             yield (0, exec_1.exec)('cargo', exec_args, exec_opts);
                             yield (0, crates_1.awaitCrateVersion)(package_name, package_info.version);
@@ -228,16 +232,18 @@ function run() {
                             yield (0, crates_1.awaitCrateVersion)(package_name, package_info.version);
                             (0, core_1.info)(`Package '${package_name}' published successfully`);
                         }
-                        catch (error) {
-                            const imsg = `crate version \`${package_info.version}\` is already uploaded`;
-                            (0, core_1.warning)(`${error.message} || ${imsg}`);
-                            if (ignore_published && error.message.includes(imsg)) {
-                                (0, core_1.warning)(`Ignore error when '${package_name} ${package_info.version}' is already uploaded due to 'ignore-published: true'`);
-                            }
-                            else {
-                                (0, core_1.setFailed)(error.message);
-                            }
-                        }
+                        // try {
+                        // } catch (error) {
+                        //     const imsg = `crate version \`${package_info.version}\` is already uploaded`
+                        //     warning(`${error.message} || ${imsg}`)
+                        //     if (ignore_published && error.message.includes(imsg)) {
+                        //         warning(
+                        //             `Ignore error when '${package_name} ${package_info.version}' is already uploaded due to 'ignore-published: true'`
+                        //         )
+                        //     } else {
+                        //         setFailed(error.message)
+                        //     }
+                        // }
                     }
                 }
             }
